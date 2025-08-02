@@ -1,0 +1,47 @@
+
+
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
+
+# Backup files (except git-managed ones)
+backups/*.tar.gz
+
+# Session data
+sessions/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker volumes (local development)
+volumes/
+mysql_data/
+app_data/
+redis_data/
+
+# Local overrides
+docker-compose.override.yml
+
+# Test files
+test-results/
+coverage/
+
+# Node modules (if any)
+node_modules/
+
+
+
