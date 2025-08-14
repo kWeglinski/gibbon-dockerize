@@ -35,7 +35,7 @@ RUN addgroup -g 1000 www && adduser -u 1000 -G www -s /bin/sh -D www
 WORKDIR /var/www/html
 
 # Copy application files (read-only)
-COPY --chown=www:www ../ .
+COPY --chown=www:www gibbon-core/. /var/www/html/
 
 # Create necessary directories and set permissions
 RUN mkdir -p /var/www/html/uploads && \
@@ -43,6 +43,7 @@ RUN mkdir -p /var/www/html/uploads && \
     chmod 755 /var/www/html/uploads
 
 # Copy custom PHP configuration
+# Assuming custom php.ini is placed at project root; adjust if located elsewhere
 COPY --chown=www:www php.ini /usr/local/etc/php/conf.d/custom.ini
 
 # Expose port
