@@ -42,6 +42,6 @@ coverage/
 
 # Node modules (if any)
 node_modules/
-
-
+gibbon-core/
+data/
 

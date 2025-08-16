@@ -3,7 +3,6 @@ FROM php:8.1-fpm-alpine
 
 # Install system dependencies
 RUN apk add --no-cache \
-    nginx \
     mysql-client \
     curl \
     git \
@@ -14,10 +13,12 @@ RUN apk add --no-cache \
     freetype-dev \
     libzip-dev \
     icu-dev \
-    libxml2-dev
+    gettext-dev \
+    libxml2-dev \
+    oniguruma-dev
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mysqli mbstring exif pcntl bcmath gd intl zip opcache
+RUN docker-php-ext-install pdo_mysql mysqli mbstring exif pcntl bcmath gettext gd intl zip opcache soap xml
 
 # Configure PHP
 RUN { \
@@ -46,6 +47,8 @@ RUN mkdir -p /var/www/html/uploads && \
 # Assuming custom php.ini is placed at project root; adjust if located elsewhere
 COPY --chown=www:www php.ini /usr/local/etc/php/conf.d/custom.ini
 
+# Configure PHP-FPM to listen on TCP for Nginx
+RUN echo 'listen = 0.0.0.0:9000' >> /usr/local/etc/php-fpm.d/zz-docker.conf
 # Expose port
 EXPOSE 9000
 
@@ -54,7 +57,7 @@ USER www
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:9000/ || exit 1
+    CMD curl -f --unix-socket /run/php/php8.1-fpm.sock http://localhost/status || exit 1
 
 # Start PHP-FPM
 CMD ["php-fpm"]
